@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('translations', function (Blueprint $table) {
+            $table->id();
+            $table->text('source_text');
+            $table->string('source_language', 10)->default('en');
+            $table->string('target_language', 10);
+            $table->text('translated_text');
+            $table->string('context')->nullable();
+            $table->boolean('is_approved')->default(true);
+            $table->timestamps();
+            
+            // Index for fast lookup
+            $table->index(['target_language', 'context']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('translations');
+    }
+};
